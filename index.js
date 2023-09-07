@@ -19,24 +19,37 @@
  * will pass valid data to your function.
  */
 
-function checkForBingo (bingoCard, drawnNumbers) {
-  // this code for debug purposes, you can remove.
-  console.log('Drawn Numbers: ' + JSON.stringify(drawnNumbers));
-
-  for (let i=0, len=bingoCard.length; i<len; i++) {
-    let row = Math.floor(i/5);
-    let col = i % 5;
-   //  console.log(`${row},${col}: ${bingoCard[i]}`);
+function displayGrid (arr) {
+  console.log(arr);
+  const grid = document.getElementById("grid");
+  const cells = grid.querySelectorAll("td");
+  for(let i=0; i<arr.length; i++){
+    if(arr[i] >75 || arr[i] < 1){
+      console.log("Bingo card must be between 1-75")
+      cells[i].textContent = "NA"
+      return;
+    }
+    cells[i].textContent = arr[i]
   }
-
-  return false;
 }
 
-module.exports = checkForBingo;
+function checkForBingo (bingoCard, drawnNumbers) {
+  //render the card
+  displayGrid(bingoCard);
 
-// here are some samples
+  const grid = document.getElementById("grid");
+  const cells = grid.querySelectorAll("td");
+  
+  for(let i=0;i<drawnNumbers.length;i++){
+    //Use indexOf to check if number exists in the first array
+    const index = bingoCard.indexOf(drawnNumbers[i])
+    //if second array has numbers that are not in the array, the index will be -1
+    if(index !== -1){
+      cells[index].classList.add("filled");
+    }
+  }
+}
 
-// this should return true with diagonal + free
 checkForBingo(
   [
     8, 29, 35, 54, 65,
@@ -48,18 +61,33 @@ checkForBingo(
   [
     8, 24, 53, 72
   ]
-);
+)
 
+// module.exports = checkForBingo;
+// here are some samples
+// this should return true with diagonal + free
+// checkForBingo(
+//   [
+//     8, 29, 35, 54, 65,
+//     13, 24, 44, 48, 67,
+//     9, 21, 'FREE', 59, 63,
+//     7, 19, 34, 53, 61,
+//     1, 20, 33, 46, 72
+//   ],
+//   [
+//     8, 24, 53, 72
+//   ]
+// );
 // this should return false
-checkForBingo(
-  [
-   8, 29, 35, 54, 65,
-   13, 24, 44, 48, 67,
-   9, 21, 'FREE', 59, 63,
-   7, 19, 34, 53, 61,
-   1, 20, 33, 46, 72
-  ],
-  [
-    1, 33, 53, 65, 29, 75
-  ]
-);
+// checkForBingo(
+//   [
+//    8, 29, 35, 54, 65,
+//    13, 24, 44, 48, 67,
+//    9, 21, 'FREE', 59, 63,
+//    7, 19, 34, 53, 61,
+//    1, 20, 33, 46, 72
+//   ],
+//   [
+//     1, 33, 53, 65, 29, 75
+//   ]
+// );
