@@ -25,4 +25,8 @@ table tr td{
 .filled{
     background-color: lightgray;
 }
+#message{
+    text-align: center;
+    margin-top: 20px;
+}
 

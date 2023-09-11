@@ -19,18 +19,73 @@
  * will pass valid data to your function.
  */
 
+const message = document.getElementById("message");
+
 function displayGrid (arr) {
-  console.log(arr);
+  // console.log(arr);
   const grid = document.getElementById("grid");
   const cells = grid.querySelectorAll("td");
   for(let i=0; i<arr.length; i++){
     if(arr[i] >75 || arr[i] < 1){
       console.log("Bingo card must be between 1-75")
       cells[i].textContent = "NA"
+      message.textContent = "Bingo card must be between 1-75"
       return;
     }
     cells[i].textContent = arr[i]
   }
+}
+
+function checkRows (cells) {
+  //we loop from index 0 to 4 for the first row, then multiply by 5 for each row to check the next row
+  for (let i=0;i<5;i++){
+    let win = true;
+    for (let j=0;j<5;j++){
+      const index = i * 5 + j
+      //check if the index in the row contains the classname filled to win
+      if(!cells[index].classList.contains("filled")){
+        win = false;
+        break;
+      }
+    }
+    if(win){
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkColumns(cells) {
+  //same for rows but we check the column for example first column will be 0,5,10,15,20
+  for (let i=0;i<5;i++){
+    let win = true;
+    for (let j=0;j<5;j++){
+      const index = j * 5 + i
+      if(!cells[index].classList.contains("filled")){
+        win = false;
+        break;
+      }
+    }
+    if(win){
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkDiagonals (cells) {
+  //we only have to check 2 cases here 0,6,12,18,22 and 4,8,12,16,20
+  let diagonal1 = true;
+  let diagnoal2 = true;
+  for(let i=0;i<5;i++){
+    if(!cells[i*6].classList.contains("filled")){
+      diagonal1 = false;
+    }
+    if(!cells[i*4+4].classList.contains("filled")){
+      diagnoal2 = false;
+    }
+  }
+  return diagonal1 || diagnoal2;
 }
 
 function checkForBingo (bingoCard, drawnNumbers) {
@@ -48,6 +103,15 @@ function checkForBingo (bingoCard, drawnNumbers) {
       cells[index].classList.add("filled");
     }
   }
+
+  //Start checking here
+  if(checkRows(cells) || checkColumns(cells) || checkDiagonals(cells)){
+    console.log('Win');
+    message.textContent = "You win!"
+    return
+  }
+
+  message.textContent = "No winner yet!"
 }
 
 checkForBingo(
@@ -59,7 +123,7 @@ checkForBingo(
     1, 20, 33, 46, 72
   ],
   [
-    8, 24, 53, 72
+   9,21,59,63
   ]
 )
 
